@@ -1,9 +1,7 @@
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 #include "BigIntegerLibrary.hh"
 
-//class BigNumber : Numbe
-
 TEST(NumberLikeArray, Constructor) {
-  
+  EXPECT_EQ(0, 0);
   NumberlikeArray<int> a;
 }

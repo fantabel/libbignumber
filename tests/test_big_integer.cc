@@ -18,14 +18,14 @@ TEST(BigInteger, Constructor) {
   BigUnsigned bu(myBlocks, 3);
 
   if (bu == 17179869187) {
-    std::cout << "egaux" << std::endl;
+    //std::cout << "egaux" << std::endl;
   }
 
   try {
-    std::cout << bu << std::endl;
+    //std::cout << bu << std::endl;
     EXPECT_EQ(10, bu.toUnsignedLongLong());
   } catch (char const* s) {
-    std::cout << "Exception " << s << std::endl;
+    //std::cout << "Exception " << s << std::endl;
   }
 
 }

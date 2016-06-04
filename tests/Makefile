@@ -29,6 +29,9 @@ CXXFLAGS += -g -Wall -Wextra -pthread
 
 LNKFLAGS += -g -Wall -Wextra
 
+OBJECTS += test_numberlike_array.o \
+           test_big_integer.o
+
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
 TESTS = test_suite
@@ -70,12 +73,16 @@ gtest.a: gtest-all.o
 # function.
 
 test_big_integer.o : $(USER_DIR)/test_big_integer.cc \
-                     $(USER_DIR)/test_big_integer.h $(GTEST_HEADERS) $(LIBNUMBER_HEADERS)
+                     $(GTEST_HEADERS) $(LIBNUMBER_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/test_big_integer.cc
+
+test_numberlike_array.o : $(USER_DIR)/test_numberlike_array.cc \
+                          $(GTEST_HEADERS) $(LIBNUMBER_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/test_numberlike_array.cc
 
 main.o: $(USER_DIR)/main.cc
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/main.cc
 
-test_suite: main.o test_big_integer.o gtest.a ../libnumber.a
+test_suite: main.o $(OBJECTS) gtest.a ../libnumber.a
 	$(CXX) $(CPPFLAGS) $(LNKFLAG) -lpthread $^ -o $@
 
