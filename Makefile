@@ -46,3 +46,8 @@ tests: libnumber.a
 #	cp libnumber.a tests
 	make -C tests
 	tests/test_suite
+
+.PHONY: docs
+docs:
+	rm -rf docs
+	doxygen doxygen.conf
