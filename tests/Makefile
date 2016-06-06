@@ -15,6 +15,7 @@
 # Points to the root of Google Test, relative to where this file is.
 # Remember to tweak this if you move this file.
 GTEST_DIR = /opt/gtest
+LOG4CXX_DIR = /opt/log4cxx
 
 # Where to find user code.
 USER_DIR = .
@@ -81,7 +82,7 @@ test_numberlike_array.o : $(USER_DIR)/test_numberlike_array.cc \
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/test_numberlike_array.cc
 
 main.o: $(USER_DIR)/main.cc
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/main.cc
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) LOG4CXX_HEADERS -c $(USER_DIR)/main.cc
 
 test_suite: main.o $(OBJECTS) gtest.a ../libnumber.a
 	$(CXX) $(CPPFLAGS) $(LNKFLAG) -lpthread $^ -o $@

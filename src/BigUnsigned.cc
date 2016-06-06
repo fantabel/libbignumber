@@ -1,135 +1,119 @@
 #include "BigUnsigned.hh"
 #include <iostream>
 
-
 // Memory management definitions have moved to the bottom of NumberlikeArray.hh.
 
 // The templates used by these constructors and converters are at the bottom of
 // BigUnsigned.hh.
 
 BigUnsigned::BigUnsigned(unsigned long long  x) {
-   std::cout << "(IN) BigUnsigned(unsigned long long " << x << ")" << std::endl;
-   initFromPrimitive      (x);
-   std::cout << "(OUT) BigUnsigned(unsigned long long)" << std::endl << std::endl;
+   initFromPrimitive(x);
 }
 
-BigUnsigned::BigUnsigned(unsigned long       x) {
-   std::cout << "(IN) BigUnsigned(unsigned long " << x << ")" << std::endl;
-   initFromPrimitive      (x); 
-   std::cout << "(OUT) BigUnsigned(unsigned long)" << std::endl << std::endl;
+BigUnsigned::BigUnsigned(unsigned long x) {
+   initFromPrimitive(x); 
 }
 
-BigUnsigned::BigUnsigned(unsigned int        x) {
-  std::cout << "(IN) BigUnsigned(unsigned int " << x << ")" << std::endl;
-  initFromPrimitive      (x);
-  std::cout << "(IN) BigUnsigned(unsigned int)" << std::endl << std::endl;
+BigUnsigned::BigUnsigned(unsigned int x) {
+   initFromPrimitive(x);
 }
 
-BigUnsigned::BigUnsigned(unsigned short      x) {
-  std::cout << "(IN) BigUnsigned(unsigned short " << x << ")" << std::endl;
-  initFromPrimitive      (x);
-  std::cout << "(IN) BigUnsigned(unsigned short)" << std::endl << std::endl;
+BigUnsigned::BigUnsigned(unsigned short x) {
+   initFromPrimitive(x);
+}
 
-}
-BigUnsigned::BigUnsigned(         long       x) {
-   std::cout << "(IN) BigUnsigned(long " << x << ")" << std::endl;
-   initFromSignedPrimitive(x);
-   std::cout << "(IN) BigUnsigned(long " << x << ")" << std::endl;
-   }
-
-BigUnsigned::BigUnsigned(         int        x) {
-  std::cout << "(IN) BigUnsigned(int" << x << ")" << std::endl;
-  initFromSignedPrimitive(x);
-  std::cout << "(OUT) BigUnsigned(int)" << std::endl << std::endl;
-}
-BigUnsigned::BigUnsigned(         short      x) {
-  std::cout << "(IN) BigUnsigned(short" << x << ")" << std::endl;
-  initFromSignedPrimitive(x);
-  std::cout << "(OUT) BigUnsigned(short)" << std::endl << std::endl;
-}
-BigUnsigned::BigUnsigned(         long long  x) {
-   std::cout << "(IN) BigUnsigned(long long " << x << ")" << std::endl;
+BigUnsigned::BigUnsigned(long long  x) {
    initFromSignedPrimitive(x); 
-   std::cout << "(OUT) BigUnsigned(long long)" << std::endl << std::endl;
 }
 
-unsigned long long BigUnsigned::toUnsignedLongLong () const { return convertToPrimitive      <unsigned long long >(); }
-unsigned long      BigUnsigned::toUnsignedLong     () const { return convertToPrimitive      <unsigned long      >(); }
-unsigned int       BigUnsigned::toUnsignedInt      () const { return convertToPrimitive      <unsigned int       >(); }
-unsigned short     BigUnsigned::toUnsignedShort    () const { return convertToPrimitive      <unsigned short     >(); }
-long long          BigUnsigned::toLongLong         () const { return convertToSignedPrimitive<         long long >(); }
-long               BigUnsigned::toLong             () const { return convertToSignedPrimitive<         long      >(); }
-int                BigUnsigned::toInt              () const { return convertToSignedPrimitive<         int       >(); }
-short              BigUnsigned::toShort            () const { return convertToSignedPrimitive<         short     >(); }
+BigUnsigned::BigUnsigned(long x) {
+   initFromSignedPrimitive(x);
+}
+
+BigUnsigned::BigUnsigned(int x) {
+   initFromSignedPrimitive(x);
+}
+
+BigUnsigned::BigUnsigned(short x) {
+   initFromSignedPrimitive(x);
+}
+
+unsigned long long BigUnsigned::toUnsignedLongLong() const { return convertToPrimitive<unsigned long long>(); }
+unsigned long BigUnsigned::toUnsignedLong() const { return convertToPrimitive<unsigned long>(); }
+unsigned int BigUnsigned::toUnsignedInt() const { return convertToPrimitive<unsigned int>(); }
+unsigned short BigUnsigned::toUnsignedShort() const { return convertToPrimitive<unsigned short>(); }
+long long BigUnsigned::toLongLong() const { return convertToSignedPrimitive<long long>(); }
+long BigUnsigned::toLong() const { return convertToSignedPrimitive<long>(); }
+int BigUnsigned::toInt() const { return convertToSignedPrimitive<int>(); }
+short BigUnsigned::toShort() const { return convertToSignedPrimitive<short>(); }
 
 // BIT/BLOCK ACCESSORS
 
 void BigUnsigned::setBlock(Index i, Blk newBlock) {
-	if (newBlock == 0) {
-		if (i < len) {
-			blk[i] = 0;
-			zapLeadingZeros();
-		}
-		// If i >= len, no effect.
-	} else {
-		if (i >= len) {
-			// The nonzero block extends the number.
-			allocateAndCopy(i+1);
-			// Zero any added blocks that we aren't setting.
-			for (Index j = len; j < i; j++)
-				blk[j] = 0;
-			len = i+1;
-		}
-		blk[i] = newBlock;
-	}
+   if (newBlock == 0) {
+      if (i < len) {
+         blk[i] = 0;
+         zapLeadingZeros();
+      }
+   } else {
+      if (i >= len) {
+         // The nonzero block extends the number.
+         allocateAndCopy(i+1);
+         // Zero any added blocks that we aren't setting.
+         for (Index j = len; j < i; j++)
+            blk[j] = 0;
+         len = i+1;
+      }
+      blk[i] = newBlock;
+   }
 }
 
 /* Evidently the compiler wants BigUnsigned:: on the return type because, at
  * that point, it hasn't yet parsed the BigUnsigned:: on the name to get the
  * proper scope. */
 BigUnsigned::Index BigUnsigned::bitLength() const {
-	if (isZero())
-		return 0;
-	else {
-		Blk leftmostBlock = getBlock(len - 1);
-		Index leftmostBlockLen = 0;
-		while (leftmostBlock != 0) {
-			leftmostBlock >>= 1;
-			leftmostBlockLen++;
-		}
-		return leftmostBlockLen + (len - 1) * N;
-	}
+   if (isZero())
+      return 0;
+   else {
+      Blk leftmostBlock = getBlock(len - 1);
+      Index leftmostBlockLen = 0;
+      while (leftmostBlock != 0) {
+         leftmostBlock >>= 1;
+         leftmostBlockLen++;
+      }
+      return leftmostBlockLen + (len - 1) * N;
+   }
 }
 
 void BigUnsigned::setBit(Index bi, bool newBit) {
-	Index blockI = bi / N;
-	Blk block = getBlock(blockI), mask = Blk(1) << (bi % N);
-	block = newBit ? (block | mask) : (block & ~mask);
-	setBlock(blockI, block);
+   Index blockI = bi / N;
+   Blk block = getBlock(blockI), mask = Blk(1) << (bi % N);
+   block = newBit ? (block | mask) : (block & ~mask);
+   setBlock(blockI, block);
 }
 
 // COMPARISON
 BigUnsigned::CmpRes BigUnsigned::compareTo(const BigUnsigned &x) const {
-	// A bigger length implies a bigger number.
-	if (len < x.len)
-		return less;
-	else if (len > x.len)
-		return greater;
-	else {
-		// Compare blocks one by one from left to right.
-		Index i = len;
-		while (i > 0) {
-			i--;
-			if (blk[i] == x.blk[i])
-				continue;
-			else if (blk[i] > x.blk[i])
-				return greater;
-			else
-				return less;
-		}
-		// If no blocks differed, the numbers are equal.
-		return equal;
-	}
+   // A bigger length implies a bigger number.
+   if (len < x.len)
+      return less;
+   else if (len > x.len)
+      return greater;
+   else {
+      // Compare blocks one by one from left to right.
+      Index i = len;
+      while (i > 0) {
+         i--;
+         if (blk[i] == x.blk[i])
+            continue;
+         else if (blk[i] > x.blk[i])
+            return greater;
+         else
+            return less;
+      }
+      // If no blocks differed, the numbers are equal.
+      return equal;
+   }
 }
 
 // COPY-LESS OPERATIONS
@@ -155,73 +139,71 @@ BigUnsigned::CmpRes BigUnsigned::compareTo(const BigUnsigned &x) const {
  * I'll leave in the copy.
  */
 #define DTRT_ALIASED(cond, op) \
-	if (cond) { \
-		BigUnsigned tmpThis; \
-		tmpThis.op; \
-		*this = tmpThis; \
-		return; \
-	}
-
-
+   if (cond) { \
+      BigUnsigned tmpThis; \
+      tmpThis.op; \
+      *this = tmpThis; \
+      return; \
+   }
 
 void BigUnsigned::add(const BigUnsigned &a, const BigUnsigned &b) {
-	DTRT_ALIASED(this == &a || this == &b, add(a, b));
-	// If one argument is zero, copy the other.
-	if (a.len == 0) {
-		operator =(b);
-		return;
-	} else if (b.len == 0) {
-		operator =(a);
-		return;
-	}
-	// Some variables...
-	// Carries in and out of an addition stage
-	bool carryIn, carryOut;
-	Blk temp;
-	Index i;
-	// a2 points to the longer input, b2 points to the shorter
-	const BigUnsigned *a2, *b2;
-	if (a.len >= b.len) {
-		a2 = &a;
-		b2 = &b;
-	} else {
-		a2 = &b;
-		b2 = &a;
-	}
-	// Set prelimiary length and make room in this BigUnsigned
-	len = a2->len + 1;
-	allocate(len);
-	// For each block index that is present in both inputs...
-	for (i = 0, carryIn = false; i < b2->len; i++) {
-		// Add input blocks
-		temp = a2->blk[i] + b2->blk[i];
-		// If a rollover occurred, the result is less than either input.
-		// This test is used many times in the BigUnsigned code.
-		carryOut = (temp < a2->blk[i]);
-		// If a carry was input, handle it
-		if (carryIn) {
-			temp++;
-			carryOut |= (temp == 0);
-		}
-		blk[i] = temp; // Save the addition result
-		carryIn = carryOut; // Pass the carry along
-	}
-	// If there is a carry left over, increase blocks until
-	// one does not roll over.
-	for (; i < a2->len && carryIn; i++) {
-		temp = a2->blk[i] + 1;
-		carryIn = (temp == 0);
-		blk[i] = temp;
-	}
-	// If the carry was resolved but the larger number
-	// still has blocks, copy them over.
-	for (; i < a2->len; i++)
-		blk[i] = a2->blk[i];
-	// Set the extra block if there's still a carry, decrease length otherwise
-	if (carryIn)
-		blk[i] = 1;
-	else
-		len--;
+   DTRT_ALIASED(this == &a || this == &b, add(a, b));
+   // If one argument is zero, copy the other.
+   if (a.len == 0) {
+      operator =(b);
+      return;
+   } else if (b.len == 0) {
+      operator =(a);
+      return;
+   }
+   // Some variables...
+   // Carries in and out of an addition stage
+   bool carryIn, carryOut;
+   Blk temp;
+   Index i;
+   // a2 points to the longer input, b2 points to the shorter
+   const BigUnsigned *a2, *b2;
+   if (a.len >= b.len) {
+      a2 = &a;
+      b2 = &b;
+   } else {
+      a2 = &b;
+      b2 = &a;
+   }
+   // Set prelimiary length and make room in this BigUnsigned
+   len = a2->len + 1;
+   allocate(len);
+   // For each block index that is present in both inputs...
+   for (i = 0, carryIn = false; i < b2->len; i++) {
+      // Add input blocks
+      temp = a2->blk[i] + b2->blk[i];
+      // If a rollover occurred, the result is less than either input.
+      // This test is used many times in the BigUnsigned code.
+      carryOut = (temp < a2->blk[i]);
+      // If a carry was input, handle it
+      if (carryIn) {
+         temp++;
+         carryOut |= (temp == 0);
+      }
+      blk[i] = temp; // Save the addition result
+      carryIn = carryOut; // Pass the carry along
+   }
+   // If there is a carry left over, increase blocks until
+   // one does not roll over.
+   for (; i < a2->len && carryIn; i++) {
+      temp = a2->blk[i] + 1;
+      carryIn = (temp == 0);
+      blk[i] = temp;
+   }
+   // If the carry was resolved but the larger number
+   // still has blocks, copy them over.
+   for (; i < a2->len; i++)
+      blk[i] = a2->blk[i];
+      // Set the extra block if there's still a carry, decrease length otherwise
+   if (carryIn)
+      blk[i] = 1;
+   else
+      len--;
 }
 
 void BigUnsigned::subtract(const BigUnsigned &a, const BigUnsigned &b) {

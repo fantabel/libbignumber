@@ -1,5 +1,6 @@
 CC=g++
-CFLAGS=-c -Wall -std=c++0x -pedantic
+CFLAGS=-c -Wall -std=c++0x -pedantic -I /opt/log4cxx/include
+LNFLAGS=./lib/liblog4cxx.a
 OUT = libnumber.a
 OTEST = testsuite
 CC = g++
@@ -8,7 +9,6 @@ SDIR = src
 INC = -Iheaders
 
 all: $(OUT)
-
 
 # Components of the library.
 library-objects = \
@@ -33,7 +33,7 @@ $(ODIR)/%.o: $(SDIR)/%.cc
 	$(CC) -c $(INC) -o $@ $< $(CFLAGS) 
 
 $(OUT): $(OBJS)
-	ar rvs $(OUT) $(OBJS)
+	ar rvs $(OUT) $(OBJS) $(LNFLAGS)
 #	cp $(OUT) tests
 
 .PHONY: clean
@@ -41,6 +41,7 @@ clean:
 	rm -f $(ODIR)/*.o $(OUT)
 	rm -rf html latex
 	make clean -C tests
+
 .PHONY: tests
 tests: libnumber.a
 #	cp libnumber.a tests
