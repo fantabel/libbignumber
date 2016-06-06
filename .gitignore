@@ -2,3 +2,4 @@ libnumber.a
 *.o
 docs/
 test_suite
+*.exe
