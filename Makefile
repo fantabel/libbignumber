@@ -1,6 +1,5 @@
 CC=g++
-CFLAGS=-c -Wall -std=c++0x -pedantic -I /opt/log4cxx/include
-LNFLAGS=./lib/liblog4cxx.a
+CFLAGS=-c -Wall -std=c++0x -pedantic
 OUT = libnumber.a
 OTEST = testsuite
 CC = g++

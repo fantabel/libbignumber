@@ -1,6 +1,3 @@
-#include <log4cxx/logger.h>
-#include "log4cxx/basicconfigurator.h"
-#include "log4cxx/helpers/exception.h"
 #include "BigInteger.hh"
 
 void BigInteger::operator =(const BigInteger &x) {

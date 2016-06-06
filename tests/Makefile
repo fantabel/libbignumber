@@ -14,8 +14,7 @@
 
 # Points to the root of Google Test, relative to where this file is.
 # Remember to tweak this if you move this file.
-GTEST_DIR = /opt/gtest
-LOG4CXX_DIR = /opt/log4cxx
+GTEST_DIR = ./lib
 
 # Where to find user code.
 USER_DIR = .
@@ -23,12 +22,12 @@ USER_DIR = .
 # Flags passed to the preprocessor.
 # Set Google Test's header directory as a system directory, such that
 # the compiler doesn't generate warnings in Google Test headers.
-CPPFLAGS += -isystem $(GTEST_DIR)/headers -I $(LIBNUMBER_DIR)/headers
+CPPFLAGS += -isystem $(GTEST_DIR)/include -I $(LIBNUMBER_DIR)/headers
 
 # Flags passed to the C++ compiler.
 CXXFLAGS += -g -Wall -Wextra -pthread
 
-LNKFLAGS += -g -Wall -Wextra
+LNKFLAGS += -g -Wall -Wextra#-L$(GTEST_DIR) -lgtest
 
 OBJECTS += test_numberlike_array.o \
            test_big_integer.o
@@ -39,39 +38,16 @@ TESTS = test_suite
 
 # All Google Test headers.  Usually you shouldn't change this
 # definition.
-GTEST_HEADERS = $(GTEST_DIR)/headers/gtest/*.h \
-                $(GTEST_DIR)/headers/gtest/internal/*.h
+GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
+                $(GTEST_DIR)/include/gtest/internal/*.h
 
 LIBNUMBER_HEADERS = ../headers/*.hh
 LIBNUMBER_DIR = ..
-
-# House-keeping build targets.
 
 all : $(TESTS)
 
 clean :
 	rm -f $(TESTS) *.o
-
-# Builds gtest.a and gtest_main.a.
-
-# Usually you shouldn't tweak such internal variables, indicated by a
-# trailing _.
-GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
-
-# For simplicity and to avoid depending on Google Test's
-# implementation details, the dependencies specified below are
-# conservative and not optimized.  This is fine as Google Test
-# compiles fast and for ordinary users its source rarely changes.
-gtest-all.o: $(GTEST_SRCS_)
-	$(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \
-            $(GTEST_DIR)/src/gtest-all.cc
-
-gtest.a: gtest-all.o
-	$(AR) $(ARFLAGS) $@ $^
-
-# Builds a sample test.  A test should link with either gtest.a or
-# gtest_main.a, depending on whether it defines its own main()
-# function.
 
 test_big_integer.o : $(USER_DIR)/test_big_integer.cc \
                      $(GTEST_HEADERS) $(LIBNUMBER_HEADERS)
@@ -82,8 +58,8 @@ test_numberlike_array.o : $(USER_DIR)/test_numberlike_array.cc \
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/test_numberlike_array.cc
 
 main.o: $(USER_DIR)/main.cc
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) LOG4CXX_HEADERS -c $(USER_DIR)/main.cc
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/main.cc
 
-test_suite: main.o $(OBJECTS) gtest.a ../libnumber.a
-	$(CXX) $(CPPFLAGS) $(LNKFLAG) -lpthread $^ -o $@
+test_suite: main.o $(OBJECTS) ../libnumber.a
+	$(CXX) $(CPPFLAGS) $(LNKFLAGS) $^ $(GTEST_DIR)/libgtest.a -o $@
 
