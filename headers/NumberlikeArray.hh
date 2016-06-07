@@ -6,6 +6,7 @@
 #define NULL 0
 #endif
 #include <iostream>
+#include <sstream>
 
 /*!
  * \file
@@ -42,7 +43,7 @@ public:
    Blk *blk;
 
    //! Constructs a "zero" NumberlikeArray with the given capacity.
-   NumberlikeArray(Index c) : cap(c), len(0) { 
+   NumberlikeArray(Index c) : cap(c), len(0) {
       blk = (cap > 0) ? (new Blk[cap]) : NULL;
    }
 
@@ -62,7 +63,7 @@ public:
    }
 
    /*! \brief Ensures that the array has at least the requested capacity;
-    * may destroy the contents. 
+    * may destroy the contents.
     */
    void allocate(Index c);
 
@@ -104,7 +105,18 @@ public:
    bool operator !=(const NumberlikeArray<Blk> &x) const {
       return !operator ==(x);
    }
+
+   /*! \brief Convert current object to string
+    */
+   virtual std::string toString();
 };
+
+template <class Blk>
+std::string NumberlikeArray<Blk>::toString() {
+   std::stringstream ss;
+   ss << "Hello World" << std::endl;
+   return ss.str();
+}
 
 /*!
  * Define the real size of a block 

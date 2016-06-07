@@ -4,4 +4,5 @@
 TEST(NumberLikeArray, Constructor) {
   EXPECT_EQ(0, 0);
   NumberlikeArray<int> a;
+  std::cout << a.toString();
 }

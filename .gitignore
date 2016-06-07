@@ -3,3 +3,4 @@ libnumber.a
 docs/
 test_suite
 *.exe
+*.swp
