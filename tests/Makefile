@@ -30,7 +30,8 @@ CXXFLAGS += -g -Wall -Wextra -pthread
 LNKFLAGS += -g -Wall -Wextra#-L$(GTEST_DIR) -lgtest
 
 OBJECTS += test_numberlike_array.o \
-           test_big_integer.o
+           test_big_integer.o \
+           test_bigunsigned.o
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
@@ -56,6 +57,10 @@ test_big_integer.o : $(USER_DIR)/test_big_integer.cc \
 test_numberlike_array.o : $(USER_DIR)/test_numberlike_array.cc \
                           $(GTEST_HEADERS) $(LIBNUMBER_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/test_numberlike_array.cc
+
+test_bigunsigned.o : $(USER_DIR)/test_bigunsigned.cc \
+                     $(GTEST_HEADERS) $(LIBNUMBER_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/test_bigunsigned.cc
 
 main.o: $(USER_DIR)/main.cc
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/main.cc

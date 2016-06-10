@@ -43,7 +43,6 @@ std::ostream &operator <<(std::ostream &os, const BigUnsigned &x) {
 }
 
 std::ostream &operator <<(std::ostream &os, const BigInteger &x) {
-  std::cout << "operator<<" << std::endl;
 	if (x.getSign() == BigInteger::negative)
 		os << '-';
 	os << x.getMagnitude();

@@ -1,13 +1,15 @@
 #include "BigInteger.hh"
 
 void BigInteger::operator =(const BigInteger &x) {
-	// Calls like a = a have no effect
-	if (this == &x)
-		return;
-	// Copy sign
-	sign = x.sign;
-	// Copy the rest
-	mag = x.mag;
+   // Calls like a = a have no effect
+   if (this == &x)
+      return;
+
+   // Copy sign
+   sign = x.sign;
+
+   // Copy the rest
+   mag = x.mag;
 }
 
 BigInteger::BigInteger(const Blk *b, Index blen, Sign s) : mag(b, blen) {

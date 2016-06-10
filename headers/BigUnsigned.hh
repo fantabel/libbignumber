@@ -32,6 +32,7 @@ public:
 
 	typedef NumberlikeArray<Blk>::Index Index;
 	using NumberlikeArray<Blk>::N;
+        using NumberlikeArray<Blk>::toString;
 
 protected:
 	// Creates a BigUnsigned with a capacity; for internal use.
@@ -369,7 +370,6 @@ inline void BigUnsigned::operator >>=(int b) {
  * known to be nonnegative. */
 template <class X>
 void BigUnsigned::initFromPrimitive(X x) {
-  std::cout << sizeof(x) << " " << x << std::endl;
 	if (x == 0)
 		; // NumberlikeArray already initialized us to zero.
 	else {
@@ -413,7 +413,6 @@ X BigUnsigned::convertToPrimitive() const {
 			return x;
 		// Otherwise fall through.
 	}
-        std::cout << "2throw" << std::endl;
 	throw "BigUnsigned::to<Primitive>: "
 		"Value is too big to fit in the requested type";
 }

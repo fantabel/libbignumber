@@ -1,7 +1,8 @@
 #include "BigIntegerAlgorithms.hh"
 
+
 BigUnsigned gcd(BigUnsigned a, BigUnsigned b) {
-	BigUnsigned trash;
+   BigUnsigned trash;
 	// Neat in-place alternating technique.
 	for (;;) {
 		if (b.isZero())

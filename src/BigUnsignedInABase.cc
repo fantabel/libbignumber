@@ -1,5 +1,9 @@
 #include "BigUnsignedInABase.hh"
 
+/*!
+ * \file
+ * \brief Fichier qui donne la definition de BigUnsignedInABase.
+ */
 BigUnsignedInABase::BigUnsignedInABase(const Digit *d, Index l, Base base)
 	: NumberlikeArray<Digit>(d, l), base(base) {
 	// Check the base
