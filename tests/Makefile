@@ -65,6 +65,9 @@ test_bigunsigned.o : $(USER_DIR)/test_bigunsigned.cc \
 main.o: $(USER_DIR)/main.cc
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/main.cc
 
+gtest.a: lib/gtest.a
+	cp /opt/gtest/lib/gtest.a ./lib
+
 test_suite: main.o $(OBJECTS) ../libnumber.a
-	$(CXX) $(CPPFLAGS) $(LNKFLAGS) $^ $(GTEST_DIR)/libgtest.a -o $@
+	$(CXX) $(CPPFLAGS) $(LNKFLAGS) $^ $(GTEST_DIR)/gtest.a -o $@
 
