@@ -4,3 +4,4 @@ docs/
 test_suite
 *.exe
 *.swp
+tests/lib/gtest.a
