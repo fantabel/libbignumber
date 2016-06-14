@@ -16,6 +16,8 @@ TEST(BigUnsigned, Constructor) {
   myBlocks[1] = 4;
   myBlocks[2] = 0;
   BigUnsigned bu(myBlocks, 3);
+  
+  std::cout << bu << std::endl;
 
   if (bu == 17179869187) {
     std::cout << "egaux" << std::endl;

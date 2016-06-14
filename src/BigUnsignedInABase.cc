@@ -107,23 +107,27 @@ BigUnsignedInABase::BigUnsignedInABase(const std::string &s, Base base) {
 }
 
 BigUnsignedInABase::operator std::string() const {
-	if (base > 36)
-		throw "BigUnsignedInABase ==> std::string: The default string conversion routines use the symbol set 0-9, A-Z and therefore support only up to base 36.  You tried a conversion with a base over 36; write your own string conversion routine.";
-	if (len == 0)
-		return std::string("0");
-	// Some compilers don't have push_back, so use a char * buffer instead.
-	char *s = new char[len + 1];
-	s[len] = '\0';
-	Index digitNum, symbolNumInString;
-	for (symbolNumInString = 0; symbolNumInString < len; symbolNumInString++) {
-		digitNum = len - 1 - symbolNumInString;
-		Digit theDigit = blk[digitNum];
-		if (theDigit < 10)
-			s[symbolNumInString] = char('0' + theDigit);
-		else
-			s[symbolNumInString] = char('A' + theDigit - 10);
-	}
-	std::string s2(s);
-	delete [] s;
-	return s2;
+
+    if (base > 36)
+        throw "BigUnsignedInABase ==> std::string: The default string conversion routines use the symbol set 0-9, A-Z and therefore support only up to base 36.  You tried a conversion with a base over 36; write your own string conversion routine.";
+
+        if (len == 0)
+            return std::string("0");
+
+    // Some compilers don't have push_back, so use a char * buffer instead.
+    char *s = new char[len + 1];
+    s[len] = '\0';
+    Index digitNum, symbolNumInString;
+
+    for (symbolNumInString = 0; symbolNumInString < len; symbolNumInString++) {
+        digitNum = len - 1 - symbolNumInString;
+        Digit theDigit = blk[digitNum];
+        if (theDigit < 10)
+            s[symbolNumInString] = char('0' + theDigit);
+        else
+            s[symbolNumInString] = char('A' + theDigit - 10);
+    }
+    std::string s2(s);
+    delete [] s;
+    return s2;
 }

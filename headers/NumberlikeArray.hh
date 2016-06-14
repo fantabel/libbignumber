@@ -114,7 +114,7 @@ public:
 template <class Blk>
 std::string NumberlikeArray<Blk>::toString() {
    std::stringstream ss;
-   std::cout << "WTF?" << std::endl;
+   ss << "WTF?" << std::endl;
    ss << "Hello World" << std::endl;
    return ss.str();
 }
