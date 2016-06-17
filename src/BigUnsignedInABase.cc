@@ -75,44 +75,47 @@ BigUnsignedInABase::operator BigUnsigned() const {
 }
 
 BigUnsignedInABase::BigUnsignedInABase(const std::string &s, Base base) {
-	// Check the base.
-	if (base > 36)
-		throw "BigUnsignedInABase(std::string, Base): The default string conversion routines use the symbol set 0-9, A-Z and therefore support only up to base 36.  You tried a conversion with a base over 36; write your own string conversion routine.";
-	// Save the base.
-	// This pattern is seldom seen in C++, but the analogous ``this.'' is common in Java.
-	this->base = base;
+    // Check the base.
+    if (base > 36)
+        throw "BigUnsignedInABase(std::string, Base): The default string conversion routines use the symbol set 0-9, A-Z and therefore support only up to base 36.  You tried a conversion with a base over 36; write your own string conversion routine.";
+    // Save the base.
+    // This pattern is seldom seen in C++, but the analogous ``this.'' is common in Java.
+    this->base = base;
 
-	// `s.length()' is a `size_t', while `len' is a `NumberlikeArray::Index',
-	// also known as an `unsigned int'.  Some compilers warn without this cast.
-	len = Index(s.length());
-	allocate(len);
+    // `s.length()' is a `size_t', while `len' is a `NumberlikeArray::Index',
+    // also known as an `unsigned int'.  Some compilers warn without this cast.
+    len = Index(s.length());
+    allocate(len);
 
-	Index digitNum, symbolNumInString;
-	for (digitNum = 0; digitNum < len; digitNum++) {
-		symbolNumInString = len - 1 - digitNum;
-		char theSymbol = s[symbolNumInString];
-		if (theSymbol >= '0' && theSymbol <= '9')
-			blk[digitNum] = theSymbol - '0';
-		else if (theSymbol >= 'A' && theSymbol <= 'Z')
-			blk[digitNum] = theSymbol - 'A' + 10;
-		else if (theSymbol >= 'a' && theSymbol <= 'z')
-			blk[digitNum] = theSymbol - 'a' + 10;
-		else
-			throw "BigUnsignedInABase(std::string, Base): Bad symbol in input.  Only 0-9, A-Z, a-z are accepted.";
+    Index digitNum, symbolNumInString;
+    for (digitNum = 0; digitNum < len; digitNum++) {
+        symbolNumInString = len - 1 - digitNum;
+        char theSymbol = s[symbolNumInString];
 
-		if (blk[digitNum] >= base)
-			throw "BigUnsignedInABase::BigUnsignedInABase(const Digit *, Index, Base): A digit is too large for the specified base";
-	}
-	zapLeadingZeros();
+        if (theSymbol >= '0' && theSymbol <= '9')
+            blk[digitNum] = theSymbol - '0';
+
+        else if (theSymbol >= 'A' && theSymbol <= 'Z')
+            blk[digitNum] = theSymbol - 'A' + 10;
+
+        else if (theSymbol >= 'a' && theSymbol <= 'z')
+            blk[digitNum] = theSymbol - 'a' + 10;
+
+        else
+            throw "BigUnsignedInABase(std::string, Base): Bad symbol in input.  Only 0-9, A-Z, a-z are accepted.";
+
+        if (blk[digitNum] >= base)
+            throw "BigUnsignedInABase::BigUnsignedInABase(const Digit *, Index, Base): A digit is too large for the specified base";
+    }
+    zapLeadingZeros();
 }
 
 BigUnsignedInABase::operator std::string() const {
-
     if (base > 36)
         throw "BigUnsignedInABase ==> std::string: The default string conversion routines use the symbol set 0-9, A-Z and therefore support only up to base 36.  You tried a conversion with a base over 36; write your own string conversion routine.";
 
-        if (len == 0)
-            return std::string("0");
+    if (len == 0)
+        return std::string("0");
 
     // Some compilers don't have push_back, so use a char * buffer instead.
     char *s = new char[len + 1];
